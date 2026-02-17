@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Number Guessing</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="container">
+    <h1>🔢 Number Guessing</h1>
+    <p>Guess number between 1 and 100</p>
+    <input type="number" id="guess">
+    <button onclick="checkGuess()">Submit</button>
+    <p id="result"></p>
+    <a href="index.html">Back</a>
+</div>
+
+<script>
+let secret = Math.floor(Math.random() * 100) + 1;
+
+function checkGuess() {
+    let user = Number(document.getElementById("guess").value);
+    let result = document.getElementById("result");
+
+    if (user < secret) {
+        result.innerText = "Too Low!";
+    } else if (user > secret) {
+        result.innerText = "Too High!";
+    } else {
+        result.innerText = "Correct! 🎉";
+    }
+}
+</script>
+
+</body>
+</html>

@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Memory Flip 5x5</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(5, 70px);
+            gap: 10px;
+            justify-content: center;
+            margin-top: 20px;
+        }
+
+        .card {
+            width: 70px;
+            height: 70px;
+            background: #222;
+            border: 1px solid #555;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 24px;
+            cursor: pointer;
+            border-radius: 8px;
+        }
+
+        .card.flipped {
+            background: #444;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>🧠 Memory Flip 5x5</h1>
+    <div class="grid" id="grid"></div>
+    <button onclick="resetGame()">Reset</button>
+    <a href="index.html">Back</a>
+</div>
+
+<script>
+let symbols = ["A","B","C","D","E","F","G","H","I","J","K","L"];
+let cards = [...symbols, ...symbols, "⭐"];
+let firstCard = null;
+let secondCard = null;
+let lock = false;
+
+function shuffle(array) {
+    for (let i = array.length - 1; i > 0; i--) {
+        let j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
+    }
+}
+
+function createBoard() {
+    const grid = document.getElementById("grid");
+    grid.innerHTML = "";
+    shuffle(cards);
+
+    cards.forEach((symbol, index) => {
+        const card = document.createElement("div");
+        card.classList.add("card");
+        card.dataset.symbol = symbol;
+        card.dataset.index = index;
+        card.onclick = flipCard;
+        grid.appendChild(card);
+    });
+}
+
+function flipCard() {
+    if (lock || this.classList.contains("flipped")) return;
+
+    this.textContent = this.dataset.symbol;
+    this.classList.add("flipped");
+
+    if (!firstCard) {
+        firstCard = this;
+    } else {
+        secondCard = this;
+        checkMatch();
+    }
+}
+
+function checkMatch() {
+    if (firstCard.dataset.symbol === secondCard.dataset.symbol) {
+        firstCard = null;
+        secondCard = null;
+        checkWin();
+    } else {
+        lock = true;
+        setTimeout(() => {
+            firstCard.textContent = "";
+            secondCard.textContent = "";
+            firstCard.classList.remove("flipped");
+            secondCard.classList.remove("flipped");
+            firstCard = null;
+            secondCard = null;
+            lock = false;
+        }, 800);
+    }
+}
+
+function checkWin() {
+    let allCards = document.querySelectorAll(".card");
+    for (let card of allCards) {
+        if (!card.classList.contains("flipped")) {
+            return;
+        }
+    }
+    setTimeout(() => alert("🎉 You Won!"), 300);
+}
+
+function resetGame() {
+    firstCard = null;
+    secondCard = null;
+    lock = false;
+    createBoard();
+}
+
+createBoard();
+</script>
+
+</body>
+</html>

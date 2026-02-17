@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Mini Game Hub</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        input {
+            padding: 10px;
+            width: 200px;
+            margin-bottom: 15px;
+            border-radius: 6px;
+            border: none;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+
+    <!-- Name Section -->
+    <div id="nameSection">
+        <h1>🎮 Welcome to Mini Game Hub</h1>
+        <p>Enter Your Name</p>
+        <input type="text" id="playerName" placeholder="Your Name">
+        <button onclick="saveName()">Start Playing</button>
+    </div>
+
+    <!-- Game Menu Section -->
+    <div id="gameSection" style="display:none;">
+        <h1 id="welcomeText"></h1>
+
+        <a href="tic.html">Tic Tac Toe</a>
+        <a href="rps.html">Rock Paper Scissors</a>
+        <a href="dice.html">Dice Roll</a>
+        <a href="guess.html">Number Guessing</a>
+        <a href="memory.html">Memory Flip 5x5</a>
+
+        <button onclick="changeName()">Change Name</button>
+    </div>
+
+</div>
+
+<script>
+function saveName() {
+    let name = document.getElementById("playerName").value.trim();
+
+    if (name === "") {
+        alert("Please enter your name!");
+        return;
+    }
+
+    localStorage.setItem("playerName", name);
+    showGames();
+}
+
+function showGames() {
+    let name = localStorage.getItem("playerName");
+
+    if (name) {
+        document.getElementById("nameSection").style.display = "none";
+        document.getElementById("gameSection").style.display = "block";
+        document.getElementById("welcomeText").innerText = "Welcome, " + name + " 👋";
+    }
+}
+
+function changeName() {
+    localStorage.removeItem("playerName");
+    location.reload();
+}
+
+showGames();
+</script>
+
+</body>
+</html>
